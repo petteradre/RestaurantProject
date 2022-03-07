@@ -25,6 +25,7 @@ namespace RestaurantProjectAPI.Controllers
         [HttpGet("GetOrders")]
         public async Task<ActionResult<IEnumerable<Order>>> GetOrders()
         {
+
             return await _context.Orders.ToListAsync();
         }
 
