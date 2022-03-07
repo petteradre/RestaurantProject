@@ -16,6 +16,9 @@ namespace RestaurantProjectAPI.Models
         public int OrderId { get; set; }
         public string Name { get; set; }
         public decimal TotalAmount { get; set; }
+
+        [ForeignKey("StatusId")]
+        public virtual Status Status { get; set; }
         public DateTime DateCreated { get; set; }
         public List<ProductOrder> ProductOrders { get; set; }
     }

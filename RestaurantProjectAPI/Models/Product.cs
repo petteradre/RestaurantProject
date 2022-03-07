@@ -17,6 +17,7 @@ namespace RestaurantProjectAPI.Models
         public string Name { get; set; }
         public string SKU { get; set; }
         public decimal Price { get; set; }
+        public int Stock { get; set; }
         public DateTime DateCreated { get; set; }
         public List<ProductOrder> ProductOrders { get; set; }
 

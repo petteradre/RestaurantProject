@@ -14,12 +14,11 @@ namespace RestaurantProjectAPI.Models
         public int ProductOrderId { get; set; }
 
         [ForeignKey("OrderId")]
+        public int OrderId { get; set; }
         public virtual Order Order { get; set; }
 
-        [ForeignKey("StatusId")]
-        public virtual Status Status { get; set; }
-
         [ForeignKey("ProductId")]
+        public int ProductId { get; set; }
         public virtual Product Product { get; set; }
     }
 }

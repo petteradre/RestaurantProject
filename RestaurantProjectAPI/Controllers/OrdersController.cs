@@ -83,7 +83,7 @@ namespace RestaurantProjectAPI.Controllers
             _context.Orders.Add(order);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetOrder", new { id = order.OrderId }, order);
+            return Ok("Orden creada exitosamente");
         }
 
         // DELETE: api/v1/DeleteOrder/5

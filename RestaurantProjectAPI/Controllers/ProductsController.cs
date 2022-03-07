@@ -80,10 +80,20 @@ namespace RestaurantProjectAPI.Controllers
         [HttpPost("CreateProduct")]
         public async Task<ActionResult<Product>> PostProduct(Product product)
         {
+            var listProducts = await _context.Products.ToListAsync();
+            foreach (var item in listProducts)
+            {
+                var SKU = item.SKU;
+                if(SKU == product.SKU)
+                {
+                    return BadRequest("El SKU ya existe");
+                }
+            }
             _context.Products.Add(product);
+            
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetProduct", new { id = product.ProductId }, product);
+            return Ok("Producto creado exitosamente");
         }
 
         // DELETE: api/v1/DeleteProduct/5

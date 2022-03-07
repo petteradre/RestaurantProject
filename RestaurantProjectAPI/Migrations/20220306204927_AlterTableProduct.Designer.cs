@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RestaurantProjectAPI.DBContext;
 
 namespace RestaurantProjectAPI.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    partial class MyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220306204927_AlterTableProduct")]
+    partial class AlterTableProduct
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,15 +34,10 @@ namespace RestaurantProjectAPI.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("StatusId")
-                        .HasColumnType("int");
-
                     b.Property<decimal>("TotalAmount")
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("OrderId");
-
-                    b.HasIndex("StatusId");
 
                     b.ToTable("Orders");
                 });
@@ -117,13 +114,6 @@ namespace RestaurantProjectAPI.Migrations
                     b.ToTable("Status");
                 });
 
-            modelBuilder.Entity("RestaurantProjectAPI.Models.Order", b =>
-                {
-                    b.HasOne("RestaurantProjectAPI.Models.Status", "Status")
-                        .WithMany()
-                        .HasForeignKey("StatusId");
-                });
-
             modelBuilder.Entity("RestaurantProjectAPI.Models.ProductOrder", b =>
                 {
                     b.HasOne("RestaurantProjectAPI.Models.Order", "Order")
@@ -134,7 +124,7 @@ namespace RestaurantProjectAPI.Migrations
                         .WithMany("ProductOrders")
                         .HasForeignKey("ProductId");
 
-                    b.HasOne("RestaurantProjectAPI.Models.Status", null)
+                    b.HasOne("RestaurantProjectAPI.Models.Status", "Status")
                         .WithMany("ProductOrders")
                         .HasForeignKey("StatusId");
                 });

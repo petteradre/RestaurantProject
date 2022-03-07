@@ -81,11 +81,85 @@ namespace RestaurantProjectAPI.Controllers
         public async Task<ActionResult<ProductOrder>> PostProductOrder(ProductOrder productOrder)
         {
             _context.ProductOrders.Add(productOrder);
+            var StockProduct = _context.Products.FindAsync(productOrder.OrderId);
+            if (StockProduct != null)
+            {
+                int actualValue = StockProduct.Result.Stock;
+                int restValue = 1;
+                int newValue = actualValue - restValue;
+                Product product = new Product()
+                {
+                    ProductId = StockProduct.Result.ProductId,
+                    Name = StockProduct.Result.Name,
+                    SKU = StockProduct.Result.SKU,
+                    Price = StockProduct.Result.Price,
+                    Stock = newValue,
+                    DateCreated = StockProduct.Result.DateCreated
+                };
+
+                if (StockProduct.Result.ProductId != product.ProductId)
+                {
+                    return BadRequest();
+                }
+
+                //var productModified = _context.Entry(product).State = EntityState.Modified;
+
+                //_context.Update(product);
+                //try
+                //{
+
+                //}
+                //catch (DbUpdateConcurrencyException)
+                //{
+                //    if (!ProductOrderExists(product.ProductId))
+                //    {
+                //        return NotFound();
+                //    }
+                //    else
+                //    {
+                //        throw;
+                //    }
+                //}
+
+            }
+            else
+            {
+                return BadRequest("No hay stock");
+            }
+
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetProductOrder", new { id = productOrder.ProductOrderId }, productOrder);
+            return Ok("Orden de Producto creado exitosamente");
         }
 
+        [HttpPut("UpdateProductOrder{id}")]
+        public async Task<IActionResult> PutProduct(int id, Product product)
+        {
+            if (id != product.ProductId)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(product).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ProductOrderExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
         // DELETE: api/v1/DeleteProductOrder/5
         [HttpDelete("DeleteProductOrder{id}")]
         public async Task<ActionResult<ProductOrder>> DeleteProductOrder(int id)
